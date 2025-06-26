@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Approval Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0eafc 0%, #a1c4fd 50%, #c2e9fb 100%);
+            font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+            color: #222;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 480px;
+            margin: 40px auto;
+            background: linear-gradient(120deg, rgba(67,206,162,0.18) 0%, rgba(102,166,255,0.13) 100%);
+            border-radius: 32px;
+            box-shadow: 0 8px 32px 0 rgba(67, 206, 162, 0.18), 0 1.5px 16px 0 rgba(102,166,255,0.13), 0 0 0 8px rgba(67,206,162,0.10);
+            padding: 38px 32px 32px 32px;
+            animation: cardPopIn 1s cubic-bezier(.68,-0.55,.27,1.55);
+            backdrop-filter: blur(8px);
+            border: 2.5px solid rgba(67,206,162,0.25);
+        }
+        @keyframes cardPopIn {
+            0% { transform: scale(0.92) translateY(40px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        h1 {
+            text-align: center;
+            color: #1e3c72;
+            margin-bottom: 28px;
+            font-size: 2.2em;
+            letter-spacing: 1px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        h1 .material-icons {
+            font-size: 1.2em;
+            color: #43cea2;
+            vertical-align: middle;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(90deg, #e0eafc 0%, #f7fbff 100%);
+            border-radius: 12px;
+            box-shadow: 0 2px 12px 0 rgba(67,206,162,0.08), 0 1.5px 6px 0 rgba(102,166,255,0.07);
+            padding: 0 10px 0 0;
+            transition: box-shadow 0.3s, background 0.3s;
+        }
+        .input-group:focus-within {
+            box-shadow: 0 4px 24px 0 rgba(67,206,162,0.18), 0 2px 12px 0 rgba(102,166,255,0.13);
+            background: linear-gradient(90deg, #c2e9fb 0%, #e0eafc 100%);
+        }
+        .input-group .material-icons {
+            margin: 0 12px;
+            color: #66a6ff;
+            font-size: 1.3em;
+            transition: color 0.3s;
+        }
+        .input-group:focus-within .material-icons {
+            color: #43cea2;
+        }
+        .input-field {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            padding: 18px 8px 8px 0;
+            font-size: 1em;
+            color: #222;
+        }
+        .input-label {
+            position: absolute;
+            left: 44px;
+            top: 18px;
+            font-size: 1em;
+            color: #7b8fa1;
+            pointer-events: none;
+            transition: 0.2s cubic-bezier(.4,0,.2,1);
+            background: transparent;
+        }
+        .input-field:focus + .input-label,
+        .input-field:not(:placeholder-shown) + .input-label,
+        select:focus + .input-label,
+        select:not([value=""]) + .input-label {
+            top: 2px;
+            left: 44px;
+            font-size: 0.85em;
+            color: #43cea2;
+            background: #e0eafc;
+            padding: 0 4px;
+        }
+        select.input-field {
+            padding-right: 24px;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 8px;
+        }
+        button {
+            padding: 12px 32px;
+            background: linear-gradient(90deg, #43cea2 0%, #66a6ff 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 16px 0 rgba(67,206,162,0.13), 0 2px 8px 0 rgba(102,166,255,0.10);
+            transition: background 0.3s, transform 0.15s, box-shadow 0.3s;
+            letter-spacing: 0.5px;
+        }
+        button:active {
+            transform: scale(0.97);
+        }
+        button:hover {
+            background: linear-gradient(90deg, #66a6ff 0%, #43cea2 100%);
+            box-shadow: 0 4px 24px 0 rgba(67,206,162,0.18), 0 2px 12px 0 rgba(102,166,255,0.13);
+        }
+        .reset-btn {
+            background: linear-gradient(90deg, #f7b267 0%, #f4845f 100%);
+            box-shadow: 0 2px 16px 0 rgba(247,178,103,0.13), 0 2px 8px 0 rgba(244,132,95,0.10);
+        }
+        .reset-btn:hover {
+            background: linear-gradient(90deg, #f4845f 0%, #f7b267 100%);
+        }
+        .result {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+            border-radius: 12px;
+            padding: 20px 0;
+            box-shadow: 0 4px 24px 0 rgba(67,206,162,0.18), 0 2px 12px 0 rgba(102,166,255,0.13);
+            opacity: 0;
+            animation: fadeInResult 0.7s 0.1s forwards cubic-bezier(.68,-0.55,.27,1.55);
+        }
+        @keyframes fadeInResult {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 18px 4px;
+            }
+            form {
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="material-icons">account_balance</span> Loan Approval Prediction</h1>
+        <form method="post" autocomplete="off">
+            <div class="input-group">
+                <span class="material-icons">person</span>
+                <select name="Gender" class="input-field" required value="{{ request.form.get('Gender', 'Male') }}">
+                    <option value="" disabled hidden></option>
+                    <option value="Male" {% if request.form.get('Gender', 'Male') == 'Male' %}selected{% endif %}>Male</option>
+                    <option value="Female" {% if request.form.get('Gender') == 'Female' %}selected{% endif %}>Female</option>
+                </select>
+                <span class="input-label">Gender</span>
+            </div>
+            <div class="input-group">
+                <span class="material-icons">favorite</span>
+                <select name="Married" class="input-field" required value="{{ request.form.get('Married', 'Yes') }}">
+                    <option value="" disabled hidden></option>
+                    <option value="Yes" {% if request.form.get('Married', 'Yes') == 'Yes' %}selected{% endif %}>Yes</option>
+                    <option value="No" {% if request.form.get('Married') == 'No' %}selected{% endif %}>No</option>
+                </select>
+                <span class="input-label">Married</span>
+            </div>
+            <div class="input-group">
+                <span class="material-icons">group</span>
+                <input type="number" name="Dependents" class="input-field" min="0" max="10" required placeholder=" " value="{{ request.form.get('Dependents', '') }}">
+                <span class="input-label">Dependents</span>
+            </div>
+            <div class="input-group">
+                <span class="material-icons">school</span>
+                <select name="Education" class="input-field" required value="{{ request.form.get('Education', 'Graduate') }}">
+                    <option value="" disabled hidden></option>
+                    <option value="Graduate" {% if request.form.get('Education', 'Graduate') == 'Graduate' %}selected{% endif %}>Graduate</option>
+                    <option value="Not Graduate" {% if request.form.get('Education') == 'Not Graduate' %}selected{% endif %}>Not Graduate</option>
+                </select>
+                <span class="input-label">Education</span>
+            </div>
+            <div class="input-group">
+                <span class="material-icons">work</span>
+                <select name="Self_Employed" class="input-field" required value="{{ request.form.get('Self_Employed', 'No') }}">
+                    <option value="" disabled hidden></option>
+                    <option value="No" {% if request.form.get('Self_Employed', 'No') == 'No' %}selected{% endif %}>No</option>
+                    <option value="Yes" {% if request.form.get('Self_Employed') == 'Yes' %}selected{% endif %}>Yes</option>
+                </select>
+                <span class="input-label">Self Employed</span>
+            </div>
+            <div class="input-group">
+                <span class="material-icons">attach_money</span>
+                <input type="number" name="ApplicantIncome" class="input-field" min="0" required placeholder=" " value="{{ request.form.get('ApplicantIncome', '') }}">
+                <span class="input-label">Applicant Income</span>
+            </div>
+            <div class="input-group">
+                <span class="material-icons">money</span>
+                <input type="number" name="CoapplicantIncome" class="input-field" min="0" required placeholder=" " value="{{ request.form.get('CoapplicantIncome', '') }}">
+                <span class="input-label">Coapplicant Income</span>
+            </div>
+            <div class="input-group">
+                <span class="material-icons">account_balance_wallet</span>
+                <input type="number" name="LoanAmount" class="input-field" min="0" required placeholder=" " value="{{ request.form.get('LoanAmount', '') }}">
+                <span class="input-label">Loan Amount</span>
+            </div>
+            <div class="input-group">
+                <span class="material-icons">date_range</span>
+                <input type="number" name="Loan_Amount_Term" class="input-field" min="0" required placeholder=" " value="{{ request.form.get('Loan_Amount_Term', '') }}">
+                <span class="input-label">Loan Amount Term</span>
+            </div>
+            <div class="input-group">
+                <span class="material-icons">verified_user</span>
+                <select name="Credit_History" class="input-field" required value="{{ request.form.get('Credit_History', '1') }}">
+                    <option value="" disabled hidden></option>
+                    <option value="1" {% if request.form.get('Credit_History', '1') == '1' %}selected{% endif %}>Good (1)</option>
+                    <option value="0" {% if request.form.get('Credit_History') == '0' %}selected{% endif %}>Bad (0)</option>
+                </select>
+                <span class="input-label">Credit History</span>
+            </div>
+            <div class="input-group">
+                <span class="material-icons">location_city</span>
+                <select name="Property_Area" class="input-field" required value="{{ request.form.get('Property_Area', 'Urban') }}">
+                    <option value="" disabled hidden></option>
+                    <option value="Urban" {% if request.form.get('Property_Area', 'Urban') == 'Urban' %}selected{% endif %}>Urban</option>
+                    <option value="Semiurban" {% if request.form.get('Property_Area') == 'Semiurban' %}selected{% endif %}>Semiurban</option>
+                    <option value="Rural" {% if request.form.get('Property_Area') == 'Rural' %}selected{% endif %}>Rural</option>
+                </select>
+                <span class="input-label">Property Area</span>
+            </div>
+            <div class="form-actions">
+                <button type="submit">Predict</button>
+                <button type="reset" class="reset-btn">Reset</button>
+            </div>
+        </form>
+        {% if prediction %}
+            <div class="result">Prediction: {{ prediction }}</div>
+        {% endif %}
+    </div>
+</body>
+</html>
