@@ -48,7 +48,17 @@ A complete end-to-end machine learning project for predicting loan approval stat
 - You can rerun the notebook to retrain or experiment with new models.
 
 ## Screenshots
+
 See the `Diagram/` and `assets/` folders for EDA, model comparison, and UI screenshots.
+
+### Fill up the form to predict Loan Approval
+![Fill up the form](assets/Fillup%20the%20Form.png)
+
+### Approval UI
+![Loan Approved](assets/Approved.png)
+
+### Rejected UI
+![Loan Rejected](assets/Rejected.png)
 
 ## Credits
 - Dataset: [Kaggle Loan Prediction Dataset](https://www.kaggle.com/datasets/altruistdelhite04/loan-prediction-problem-dataset)
