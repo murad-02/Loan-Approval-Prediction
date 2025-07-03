@@ -9,6 +9,11 @@ A complete end-to-end machine learning project for predicting loan approval stat
 - Modern, responsive, and animated web UI
 - Handles all preprocessing and encoding in Python (user inputs are human-friendly)
 
+## Video Demonstration
+
+[![Watch the demo](https://img.youtube.com/vi/WAghTsmYPUw/0.jpg)](https://youtu.be/WAghTsmYPUw)
+
+
 ## Project Structure
 ```
 ├── assets/                # Project images and diagrams
