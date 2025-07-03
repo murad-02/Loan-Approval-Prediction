@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # Load the best model (update the model filename if needed)
 MODEL_DIR = os.path.join(os.path.dirname(__file__))
-MODEL_PATH = os.path.join(MODEL_DIR, 'best_model_Logistic_Regression.joblib')
+MODEL_PATH = os.path.join(MODEL_DIR, r'D:\Machine Learning\Loan-Approval-Prediction\Model\best_model_Logistic_Regression.joblib')
 model = joblib.load(MODEL_PATH)
 
 # User-friendly input fields (in order):
@@ -48,18 +48,27 @@ def preprocess_input(form):
         dependents, applicant_income, coapplicant_income, loan_amount, loan_amount_term, credit_history, loanamount_missing, gender, married, education, self_employed
     ] + property_area
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def index():
-    prediction = None
-    if request.method == 'POST':
-        try:
-            input_data = preprocess_input(request.form)
-            arr = np.array(input_data).reshape(1, -1)
-            pred = model.predict(arr)[0]
-            prediction = 'Approved' if pred == 1 else 'Rejected'
-        except Exception as e:
-            prediction = f"Error: {e}"
-    return render_template('index.html', features=USER_FEATURES, prediction=prediction)
+    return render_template('index.html', features=USER_FEATURES)
+
+# API endpoint for AJAX/JS fetch
+from flask import jsonify
+@app.route('/predict', methods=['POST'])
+def predict():
+    try:
+        # Accept JSON data from fetch
+        if request.is_json:
+            form = request.get_json()
+        else:
+            form = request.form
+        input_data = preprocess_input(form)
+        arr = np.array(input_data).reshape(1, -1)
+        pred = model.predict(arr)[0]
+        prediction = 'Approved' if pred == 1 else 'Rejected'
+        return jsonify({'prediction': prediction})
+    except Exception as e:
+        return jsonify({'prediction': f'Error: {str(e)}'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
